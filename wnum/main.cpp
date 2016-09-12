@@ -58,7 +58,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
 
   hook = SetWindowsHookExW(WH_KEYBOARD_LL, [](int code, WPARAM wparam, LPARAM lparam) {
     auto vk = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam)->vkCode;
-    if (vk == VK_LWIN || vk == VK_RWIN && wparam == WM_KEYDOWN || wparam == WM_KEYUP) {
+    if ((vk == VK_LWIN || vk == VK_RWIN) && (wparam == WM_KEYDOWN || wparam == WM_KEYUP)) {
       PostThreadMessageW(GetCurrentThreadId(), wparam == WM_KEYDOWN ? msg_show : msg_hide, 0, 0);
     }
     return CallNextHookEx(hook, code, wparam, lparam);

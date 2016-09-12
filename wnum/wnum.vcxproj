@@ -143,9 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="gdi_raii.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
