@@ -47,7 +47,6 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
   CComPtr<IUIAutomation> ui_automation;
   CoCreateInstance(__uuidof(CUIAutomation), NULL, CLSCTX_INPROC_SERVER,
     __uuidof(IUIAutomation), (void**)&ui_automation);
-  auto task_list = find_task_list(ui_automation);
 
   // create badge windows
   register_badge_class(instance);
@@ -65,14 +64,25 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
   }, nullptr, 0);
 
   MSG msg;
+  bool shown = false;
   while (GetMessage(&msg, nullptr, 0, 0)) {
     switch (msg.message) {
-    case msg_show:
-      show_badges(wnds, ui_automation, task_list);
+    case msg_show: {
+      if (!shown) {
+        auto task_list = find_task_list(ui_automation);
+        if (task_list) {
+          show_badges(wnds, ui_automation, task_list);
+          shown = true;
+        }
+      }
       break;
+    }
 
     case msg_hide:
-      RANGES_FOR(auto wnd, wnds) { ShowWindow(wnd, SW_HIDE); }
+      for(auto& wnd: wnds) { 
+        ShowWindow(wnd, SW_HIDE); 
+      }
+      shown = false;
       break;
 
     default:
